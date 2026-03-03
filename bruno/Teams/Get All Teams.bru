@@ -1,0 +1,15 @@
+meta {
+  name: Get All Teams
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:3000/teams
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

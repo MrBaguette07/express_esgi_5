@@ -1,0 +1,21 @@
+meta {
+  name: Assign Ticket
+  type: http
+  seq: 6
+}
+
+patch {
+  url: http://localhost:3000/tickets/1/assign
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "assignee_id": 2
+  }
+}

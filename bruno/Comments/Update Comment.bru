@@ -1,0 +1,21 @@
+meta {
+  name: Update Comment
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:3000/tickets/1/comments/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "content": "Commentaire mis à jour : bug confirmé sur Chrome et Firefox."
+  }
+}

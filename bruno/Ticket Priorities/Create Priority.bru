@@ -1,0 +1,23 @@
+meta {
+  name: Create Priority
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/ticket-priorities
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "code": "urgent",
+    "label": "Urgente",
+    "level": 5
+  }
+}

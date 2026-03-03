@@ -1,0 +1,24 @@
+meta {
+  name: Create Ticket
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/tickets
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "title": "Bug sur la page de connexion",
+    "description": "Le formulaire de connexion ne valide pas le champ email.",
+    "category_id": 1,
+    "priority_id": 2
+  }
+}

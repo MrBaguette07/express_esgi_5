@@ -1,0 +1,21 @@
+meta {
+  name: Update Ticket Status
+  type: http
+  seq: 7
+}
+
+patch {
+  url: http://localhost:3000/tickets/1/status
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "status": "in_progress"
+  }
+}
