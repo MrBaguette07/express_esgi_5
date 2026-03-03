@@ -86,22 +86,44 @@ exports.update = async (req, res) => {
         if (!ticket) return res.status(404).json({ error: 'Ticket introuvable' });
 
         const userRole = req.token.role;
+        const teamId = req.token.teamId;
 
         // Règle 3: Priorité
-        if (req.body.priority_id && req.body.priority_id !== ticket.priority_id) {
+        if (req.body.priority_id && parseInt(req.body.priority_id) !== ticket.priority_id) {
             if (userRole === 'support') {
                 return res.status(403).json({ error: 'Le support ne peut pas modifier la priorité' });
             }
             if (userRole !== 'manager') {
-                // Seul le manager peut modifier la priorité selon l'énoncé ? 
-                // "Un manager peut modifier la priorité"
-                // Habituellement l'auteur le peut aussi, mais l'énoncé est strict.
-                // Si on suit à la lettre : seul le manager peut modifier.
                 return res.status(403).json({ error: 'Seul un manager peut modifier la priorité' });
+            }
+            // Un manager ne peut modifier que la priorité des membres de son équipe
+            const author = await User.findByPk(ticket.author_id);
+            if (!author || author.team_id !== teamId) {
+                return res.status(403).json({ error: "Vous n'êtes pas autorisé à modifier la priorité d'un ticket hors de votre équipe" });
             }
         }
 
-        const [count] = await Ticket.update(req.body, { where: { id: req.params.id } });
+        // Règle : Manager ne peut pas traiter techniquement un ticket
+        // Si le rôle est manager, on ne laisse passer que la priorité (priority_id)
+        let dataToUpdate = req.body;
+        if (userRole === 'manager') {
+            dataToUpdate = {};
+            if (req.body.priority_id) dataToUpdate.priority_id = req.body.priority_id;
+            // Si le manager tente de modifier autre chose, on peut soit ignorer soit refuser. 
+            // L'énoncé dit "Ne peut pas traiter techniquement un ticket". 
+            // On va restreindre à la priorité uniquement.
+            if (Object.keys(req.body).some(key => key !== 'priority_id')) {
+                // Optionnel : On peut retourner une erreur ou simplement filtrer. 
+                // Pour être strict par rapport à l'énoncé :
+                return res.status(403).json({ error: "Le manager ne peut modifier que la priorité" });
+            }
+        }
+
+        // Un collaborateur ne peut pas modifier ses propres tickets s'il ne sont pas 'open' ? 
+        // L'énoncé ne le dit pas explicitement pour l'update, mais c'est logique.
+        // On va rester sur ce qui est demandé.
+
+        const [count] = await Ticket.update(dataToUpdate, { where: { id: req.params.id } });
         res.status(200).json({ message: `Lignes modifiées : ${count}` });
     } catch (e) {
         res.status(500).json({ error: e.message });
