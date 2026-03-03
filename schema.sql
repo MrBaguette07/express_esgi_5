@@ -59,7 +59,7 @@ CREATE TABLE users (
     id            INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
     full_name     VARCHAR(150) NOT NULL,
     email         VARCHAR(255) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     role          VARCHAR(20)  NOT NULL CHECK (role IN ('collaborateur', 'support', 'manager')),
     team_id       INT          DEFAULT NULL,
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
