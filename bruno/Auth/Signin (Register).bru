@@ -1,0 +1,21 @@
+meta {
+  name: Signin (Register)
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/auth/signin
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "full_name": "Alice Dupont",
+    "email": "alice@nexora.com",
+    "password": "password123",
+    "role": "collaborateur",
+    "team_id": 1
+  }
+}
