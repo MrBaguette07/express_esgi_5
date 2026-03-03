@@ -1,0 +1,442 @@
+{
+  "meta": {
+    "name": "express",
+    "type": "collection",
+    "seq": 1
+  },
+  "vars": {
+    "baseUrl": "http://localhost:3000",
+    "token": ""
+  },
+  "requests": [
+    {
+      "name": "Login",
+      "method": "POST",
+      "url": "{{baseUrl}}/auth/login",
+      "seq": 1,
+      "body": {
+        "type": "json",
+        "content": {
+          "email": "john.doe@nexora.com",
+          "password": "secret123"
+        }
+      },
+      "script": {
+        "post-response": "if (res.status === 200) {\n  bru.setVar(\"token\", res.body.token);\n}"
+      }
+    },
+    {
+      "name": "Register",
+      "method": "POST",
+      "url": "{{baseUrl}}/auth/signin",
+      "seq": 2,
+      "body": {
+        "type": "json",
+        "content": {
+          "full_name": "John Doe",
+          "email": "john.doe@nexora.com",
+          "password": "secret123",
+          "role": "collaborateur"
+        }
+      }
+    },
+    {
+      "name": "Get All Users",
+      "method": "GET",
+      "url": "{{baseUrl}}/users",
+      "seq": 3
+    },
+    {
+      "name": "Get User By Id",
+      "method": "GET",
+      "url": "{{baseUrl}}/users/1",
+      "seq": 4,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Create User",
+      "method": "POST",
+      "url": "{{baseUrl}}/users",
+      "seq": 5,
+      "body": {
+        "type": "json",
+        "content": {
+          "full_name": "Jane Support",
+          "email": "jane.support@nexora.com",
+          "password": "secret123",
+          "role": "support",
+          "team_id": 1
+        }
+      }
+    },
+    {
+      "name": "Update User",
+      "method": "PUT",
+      "url": "{{baseUrl}}/users/1",
+      "seq": 6,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      },
+      "body": {
+        "type": "json",
+        "content": {
+          "full_name": "John Doe Updated",
+          "team_id": 2
+        }
+      }
+    },
+    {
+      "name": "Delete User",
+      "method": "DELETE",
+      "url": "{{baseUrl}}/users/1",
+      "seq": 7,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Get All Teams",
+      "method": "GET",
+      "url": "{{baseUrl}}/teams",
+      "seq": 8,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Get Team By Id",
+      "method": "GET",
+      "url": "{{baseUrl}}/teams/1",
+      "seq": 9,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Create Team",
+      "method": "POST",
+      "url": "{{baseUrl}}/teams",
+      "seq": 10,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      },
+      "body": {
+        "type": "json",
+        "content": {
+          "name": "Équipe Support N1",
+          "manager_id": 2
+        }
+      }
+    },
+    {
+      "name": "Update Team",
+      "method": "PUT",
+      "url": "{{baseUrl}}/teams/1",
+      "seq": 11,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      },
+      "body": {
+        "type": "json",
+        "content": {
+          "name": "Équipe Support N1 – Mise à jour",
+          "manager_id": 3
+        }
+      }
+    },
+    {
+      "name": "Delete Team",
+      "method": "DELETE",
+      "url": "{{baseUrl}}/teams/1",
+      "seq": 12,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Get All Ticket Priorities",
+      "method": "GET",
+      "url": "{{baseUrl}}/ticket-priorities",
+      "seq": 13,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Get Ticket Priority By Id",
+      "method": "GET",
+      "url": "{{baseUrl}}/ticket-priorities/1",
+      "seq": 14,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Create Ticket Priority",
+      "method": "POST",
+      "url": "{{baseUrl}}/ticket-priorities",
+      "seq": 15,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      },
+      "body": {
+        "type": "json",
+        "content": {
+          "code": "urgent",
+          "label": "Urgent",
+          "level": 5
+        }
+      }
+    },
+    {
+      "name": "Update Ticket Priority",
+      "method": "PUT",
+      "url": "{{baseUrl}}/ticket-priorities/1",
+      "seq": 16,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      },
+      "body": {
+        "type": "json",
+        "content": {
+          "label": "Basse (modifié)",
+          "level": 1
+        }
+      }
+    },
+    {
+      "name": "Delete Ticket Priority",
+      "method": "DELETE",
+      "url": "{{baseUrl}}/ticket-priorities/5",
+      "seq": 17,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Get All Ticket Categories",
+      "method": "GET",
+      "url": "{{baseUrl}}/ticket-categories",
+      "seq": 18,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Get Ticket Category By Id",
+      "method": "GET",
+      "url": "{{baseUrl}}/ticket-categories/1",
+      "seq": 19,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Create Ticket Category",
+      "method": "POST",
+      "url": "{{baseUrl}}/ticket-categories",
+      "seq": 20,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      },
+      "body": {
+        "type": "json",
+        "content": {
+          "code": "reseau",
+          "label": "Problème réseau"
+        }
+      }
+    },
+    {
+      "name": "Update Ticket Category",
+      "method": "PUT",
+      "url": "{{baseUrl}}/ticket-categories/1",
+      "seq": 21,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      },
+      "body": {
+        "type": "json",
+        "content": {
+          "label": "Bug applicatif (modifié)"
+        }
+      }
+    },
+    {
+      "name": "Delete Ticket Category",
+      "method": "DELETE",
+      "url": "{{baseUrl}}/ticket-categories/5",
+      "seq": 22,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Get All Tickets",
+      "method": "GET",
+      "url": "{{baseUrl}}/tickets",
+      "seq": 23,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Get All Tickets – Filtered",
+      "method": "GET",
+      "url": "{{baseUrl}}/tickets?status=open&priority=3",
+      "seq": 24,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Get Ticket By Id",
+      "method": "GET",
+      "url": "{{baseUrl}}/tickets/1",
+      "seq": 25,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Create Ticket",
+      "method": "POST",
+      "url": "{{baseUrl}}/tickets",
+      "seq": 26,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      },
+      "body": {
+        "type": "json",
+        "content": {
+          "title": "Impossible d'accéder à l'application RH",
+          "description": "Depuis ce matin je ne peux plus me connecter à l'app RH. Message d'erreur 403.",
+          "category_id": 2,
+          "priority_id": 3
+        }
+      }
+    },
+    {
+      "name": "Update Ticket",
+      "method": "PUT",
+      "url": "{{baseUrl}}/tickets/1",
+      "seq": 27,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      },
+      "body": {
+        "type": "json",
+        "content": {
+          "title": "Impossible d'accéder à l'application RH (màj)",
+          "description": "Détails supplémentaires ajoutés.",
+          "priority_id": 4
+        }
+      }
+    },
+    {
+      "name": "Assign Ticket",
+      "method": "PATCH",
+      "url": "{{baseUrl}}/tickets/1/assign",
+      "seq": 28,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      },
+      "body": {
+        "type": "json",
+        "content": {
+          "assignee_id": 2
+        }
+      }
+    },
+    {
+      "name": "Update Ticket Status",
+      "method": "PATCH",
+      "url": "{{baseUrl}}/tickets/1/status",
+      "seq": 29,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      },
+      "body": {
+        "type": "json",
+        "content": {
+          "status": "in_progress"
+        }
+      }
+    },
+    {
+      "name": "Delete Ticket",
+      "method": "DELETE",
+      "url": "{{baseUrl}}/tickets/1",
+      "seq": 30,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Get Comments For Ticket",
+      "method": "GET",
+      "url": "{{baseUrl}}/tickets/1/comments",
+      "seq": 31,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    },
+    {
+      "name": "Create Comment (public)",
+      "method": "POST",
+      "url": "{{baseUrl}}/tickets/1/comments",
+      "seq": 32,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      },
+      "body": {
+        "type": "json",
+        "content": {
+          "content": "J'ai vérifié les logs, le problème semble venir du SSO."
+        }
+      }
+    },
+    {
+      "name": "Create Comment (internal – support only)",
+      "method": "POST",
+      "url": "{{baseUrl}}/tickets/1/comments",
+      "seq": 33,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      },
+      "body": {
+        "type": "json",
+        "content": {
+          "content": "Note interne : contacter l'équipe infra pour reset le compte AD.",
+          "is_internal": true
+        }
+      }
+    },
+    {
+      "name": "Update Comment",
+      "method": "PUT",
+      "url": "{{baseUrl}}/tickets/1/comments/1",
+      "seq": 34,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      },
+      "body": {
+        "type": "json",
+        "content": {
+          "content": "Commentaire modifié."
+        }
+      }
+    },
+    {
+      "name": "Delete Comment",
+      "method": "DELETE",
+      "url": "{{baseUrl}}/tickets/1/comments/1",
+      "seq": 35,
+      "headers": {
+        "Authorization": "Bearer {{token}}"
+      }
+    }
+  ]
+}
