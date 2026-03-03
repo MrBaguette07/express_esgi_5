@@ -25,10 +25,14 @@ exports.getAll = async (req, res) => {
         if (userRole === 'collaborateur') {
             where.author_id = userId;
         } else if (userRole === 'manager') {
-            const User = require('./../user/user.model.js');
-            const teamUsers = await User.findAll({ where: { team_id: teamId }, attributes: ['id'] });
-            const userIds = teamUsers.map(u => u.id);
-            where.author_id = { [Op.in]: userIds };
+            if (!teamId) {
+                // S'il n'a pas d'équipe, il ne voit que ses propres tickets
+                where.author_id = userId;
+            } else {
+                const teamUsers = await User.findAll({ where: { team_id: teamId }, attributes: ['id'] });
+                const userIds = teamUsers.map(u => u.id);
+                where.author_id = { [Op.in]: userIds };
+            }
         }
 
         const tickets = await Ticket.findAll({ where, include: includeRelations, order: [['created_at', 'DESC']] });
@@ -67,8 +71,10 @@ exports.create = async (req, res) => {
         const userRole = req.token.role;
         
         if (userRole === 'collaborateur') {
-            const criticalPriority = await TicketPriority.findOne({ where: { code: 'critical' } });
-            if (criticalPriority && parseInt(req.body.priority_id) === criticalPriority.id) {
+            const priorities = await TicketPriority.findAll();
+            const critical = priorities.find(p => p.code.includes('critical'));
+            
+            if (critical && String(req.body.priority_id) === String(critical.id)) {
                 return res.status(403).json({ error: 'Un collaborateur ne peut pas créer un ticket en critical' });
             }
         }
@@ -98,7 +104,7 @@ exports.update = async (req, res) => {
             }
             // Un manager ne peut modifier que la priorité des membres de son équipe
             const author = await User.findByPk(ticket.author_id);
-            if (!author || author.team_id !== teamId) {
+            if (!author || String(author.team_id) !== String(teamId)) {
                 return res.status(403).json({ error: "Vous n'êtes pas autorisé à modifier la priorité d'un ticket hors de votre équipe" });
             }
         }
@@ -200,7 +206,7 @@ exports.updateStatus = async (req, res) => {
         let hasAccess = false;
 
         if (allowedRole === 'author') {
-            if (ticket.author_id === userId) hasAccess = true;
+            if (Number(ticket.author_id) === Number(userId)) hasAccess = true;
         } else if (Array.isArray(allowedRole)) {
             if (allowedRole.includes(userRole)) hasAccess = true;
         } else {
