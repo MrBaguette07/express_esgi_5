@@ -1,8 +1,8 @@
-const TicketPriority = require('./ticket_priority.model.js');
+const ticketPriorityService = require('./ticket_priority.service.js');
 
 exports.getAll = async (req, res) => {
     try {
-        const priorities = await TicketPriority.findAll({ order: [['level', 'ASC']] });
+        const priorities = await ticketPriorityService.getAll();
         res.status(200).json(priorities);
     } catch (e) {
         res.status(500).json({ error: e.message });
@@ -11,17 +11,17 @@ exports.getAll = async (req, res) => {
 
 exports.getById = async (req, res) => {
     try {
-        const priority = await TicketPriority.findByPk(req.params.id);
-        if (!priority) return res.status(404).json({ error: 'Priorité introuvable' });
+        const priority = await ticketPriorityService.getById(req.params.id);
         res.status(200).json(priority);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        const status = e.message === 'Priorité introuvable' ? 404 : 500;
+        res.status(status).json({ error: e.message });
     }
 };
 
 exports.create = async (req, res) => {
     try {
-        const priority = await TicketPriority.create(req.body);
+        const priority = await ticketPriorityService.create(req.body);
         res.status(201).json(priority);
     } catch (e) {
         res.status(500).json({ error: e.message });
@@ -30,20 +30,20 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const [count] = await TicketPriority.update(req.body, { where: { id: req.params.id } });
-        if (count === 0) return res.status(404).json({ error: 'Priorité introuvable' });
+        const count = await ticketPriorityService.update(req.params.id, req.body);
         res.status(200).json({ message: `Lignes modifiées : ${count}` });
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        const status = e.message === 'Priorité introuvable' ? 404 : 500;
+        res.status(status).json({ error: e.message });
     }
 };
 
 exports.delete = async (req, res) => {
     try {
-        const count = await TicketPriority.destroy({ where: { id: req.params.id } });
-        if (count === 0) return res.status(404).json({ error: 'Priorité introuvable' });
+        const count = await ticketPriorityService.delete(req.params.id);
         res.status(200).json({ message: `Lignes supprimées : ${count}` });
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        const status = e.message === 'Priorité introuvable' ? 404 : 500;
+        res.status(status).json({ error: e.message });
     }
 };

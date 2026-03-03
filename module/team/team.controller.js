@@ -1,8 +1,8 @@
-const Team = require('./team.model.js');
+const teamService = require('./team.service.js');
 
 exports.getAll = async (req, res) => {
     try {
-        const teams = await Team.findAll();
+        const teams = await teamService.getAll();
         res.status(200).json(teams);
     } catch (e) {
         res.status(500).json({ error: e.message });
@@ -11,17 +11,17 @@ exports.getAll = async (req, res) => {
 
 exports.getById = async (req, res) => {
     try {
-        const team = await Team.findByPk(req.params.id);
-        if (!team) return res.status(404).json({ error: 'Équipe introuvable' });
+        const team = await teamService.getById(req.params.id);
         res.status(200).json(team);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        const status = e.message === 'Équipe introuvable' ? 404 : 500;
+        res.status(status).json({ error: e.message });
     }
 };
 
 exports.create = async (req, res) => {
     try {
-        const team = await Team.create(req.body);
+        const team = await teamService.create(req.body);
         res.status(201).json(team);
     } catch (e) {
         res.status(500).json({ error: e.message });
@@ -30,20 +30,20 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const [count] = await Team.update(req.body, { where: { id: req.params.id } });
-        if (count === 0) return res.status(404).json({ error: 'Équipe introuvable' });
+        const count = await teamService.update(req.params.id, req.body);
         res.status(200).json({ message: `Lignes modifiées : ${count}` });
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        const status = e.message === 'Équipe introuvable' ? 404 : 500;
+        res.status(status).json({ error: e.message });
     }
 };
 
 exports.delete = async (req, res) => {
     try {
-        const count = await Team.destroy({ where: { id: req.params.id } });
-        if (count === 0) return res.status(404).json({ error: 'Équipe introuvable' });
+        const count = await teamService.delete(req.params.id);
         res.status(200).json({ message: `Lignes supprimées : ${count}` });
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        const status = e.message === 'Équipe introuvable' ? 404 : 500;
+        res.status(status).json({ error: e.message });
     }
 };
