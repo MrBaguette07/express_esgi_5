@@ -2,13 +2,7 @@ const { DataTypes } = require('sequelize');
 const { bdd } = require('./../../helper/connexion.js');
 
 const User = bdd.define('User', {
-    firstname: {
-        type: DataTypes.STRING(255)
-    },
-    lastname: {
-        type: DataTypes.STRING(255)
-    },
-    username: {
+    fullname: {
         type: DataTypes.STRING(255),
         unique: true,
         allowNull: false
@@ -21,6 +15,25 @@ const User = bdd.define('User', {
     password: {
         type: DataTypes.STRING(256),
         allowNull: false
+    },
+    role: {
+        type: DataTypes.STRING(20),
+        unique: true,
+        allowNull: false
+    },
+    team_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+    },
+    updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
     }
 },{
     tableName: "user"
