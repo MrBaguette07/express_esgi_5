@@ -1,0 +1,23 @@
+meta {
+  name: Update Priority
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:3000/ticket-priorities/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "code": "low",
+    "label": "Basse (mise à jour)",
+    "level": 1
+  }
+}

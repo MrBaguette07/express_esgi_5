@@ -36,4 +36,10 @@ const User = bdd.define('User', {
     updatedAt: 'updated_at'
 });
 
+User.prototype.toJSON = function () {
+    const values = { ...this.get() };
+    delete values.password;
+    return values;
+};
+
 module.exports = User;

@@ -1,0 +1,24 @@
+meta {
+  name: Update User
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:3000/users/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "full_name": "Alice Dupont-Martin",
+    "email": "alice@nexora.com",
+    "role": "manager",
+    "team_id": 1
+  }
+}

@@ -1,0 +1,24 @@
+meta {
+  name: Update Ticket
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:3000/tickets/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "title": "Bug sur la page de connexion (mis à jour)",
+    "description": "Le formulaire de connexion ne valide pas le champ email. Reproductible sur Chrome.",
+    "category_id": 1,
+    "priority_id": 3
+  }
+}

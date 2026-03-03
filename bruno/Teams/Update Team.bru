@@ -1,0 +1,22 @@
+meta {
+  name: Update Team
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:3000/teams/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "name": "Equipe Infrastructure",
+    "manager_id": 2
+  }
+}
