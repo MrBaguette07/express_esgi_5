@@ -1,0 +1,30 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password # Change-moi !
+      MYSQL_DATABASE: mon_projet
+      MYSQL_USER: user_projet
+      MYSQL_PASSWORD: user_password # Change-moi aussi !
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_ui
+    restart: always
+    depends_on:
+      - mariadb
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    ports:
+      - "8080:80"
+
+volumes:
+  db_data:

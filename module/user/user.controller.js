@@ -1,6 +1,5 @@
 const { Op } = require('sequelize');
 const User = require('./user.model.js');
-const Conversation = require('../conversation/conversation.model.js');
 
 exports.getAll = async (req, res) => {
     let userList = await User.findAll();

@@ -1,7 +1,6 @@
 const { Server } = require("socket.io");
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const Conversation = require('./../module/conversation/conversation.model.js');
 const User = require('./../module/user/user.model.js');
 
 let io = null;
@@ -25,7 +24,7 @@ const initSocket = (server) => {
         }
     })
 
-    io.on("connection", (socket) => {
+/**    io.on("connection", (socket) => {
         const connectConversation = async () => {
             let conversationList = await Conversation.findAll({
                 include: [{
@@ -47,6 +46,7 @@ const initSocket = (server) => {
         connectConversation();
         console.log("Client connecté :" + socket.id);
     })
+    **/
 }
 
 function getIO() {
