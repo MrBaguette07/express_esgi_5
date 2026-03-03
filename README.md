@@ -53,7 +53,7 @@ Le serveur demarre sur le port defini dans `.env` (par defaut 3000).
 
 ### Initialisation du schema
 
-Le fichier `schema.sql` contient la structure complete de la base. Il peut etre execute manuellement via phpMyAdmin (http://localhost:8080) ou en ligne de commande. Sequelize synchronise egalement les tables au demarrage avec `alter: true`.
+Le fichier `sql/schema.sql` contient la structure complete de la base. Il peut etre execute manuellement via phpMyAdmin (http://localhost:8080) ou en ligne de commande. Le fichier `sql/jeu-donnees.sql` fournit les donnees initiales (categories et priorites). Sequelize synchronise egalement les tables au demarrage avec `alter: true`.
 
 ---
 
@@ -74,9 +74,19 @@ module/
   ticket_category/      Categories de tickets
   ticket_priority/      Priorites de tickets
   comment/              Commentaires sur les tickets
+sql/
+  schema.sql            Structure complete de la base de donnees
+  jeu-donnees.sql       Donnees initiales (categories, priorites, etc.)
 ```
 
-Chaque module contient trois fichiers : `model.js` (schema Sequelize), `controller.js` (logique metier), `route.js` (routes Express).
+Chaque module suit une architecture en trois couches et contient quatre fichiers :
+
+- `model.js` — schema Sequelize (definition de la table)
+- `service.js` — logique metier (regles, validations, acces aux donnees)
+- `controller.js` — gestion des requetes HTTP et des reponses (fait appel au service)
+- `route.js` — declaration des routes Express (avec middleware d'authentification si besoin)
+
+Le middleware d'authentification JWT se trouve dans `module/auth/auth.middleware.js`. Il verifie le token `Authorization: Bearer <token>` et expose les donnees decodees dans `req.token`.
 
 ---
 
@@ -741,3 +751,11 @@ Token requis. Seul l'auteur du commentaire peut le supprimer.
 - JSON Web Tokens (JWT)
 - bcryptjs (hachage des mots de passe)
 - Docker Compose (base de donnees)
+
+---
+
+## Tests et collection Bruno
+
+Un dossier `bruno/` est inclus a la racine du projet. Il contient une collection [Bruno](https://www.usebruno.com/) couvrant l'ensemble des routes de l'API, organisee par module (Auth, Users, Teams, Tickets, Comments, etc.).
+
+L'environnement `Local` (fichier `bruno/environments/Local.bru`) preconfigure l'URL de base et le token JWT pour faciliter les tests en local.
