@@ -61,12 +61,11 @@ Le fichier `schema.sql` contient la structure complete de la base. Il peut etre 
 
 ```
 app.js                  Point d'entree de l'application Express
-server.js               Demarrage du serveur HTTP et WebSocket
+server.js               Demarrage du serveur HTTP
 helper/
   connexion.js          Connexion Sequelize a la base
   associate.js          Definitions des relations entre modeles
   sync.js               Synchronisation du schema
-  socketManager.js      Initialisation de Socket.io
 module/
   auth/                 Authentification (login, inscription)
   user/                 Gestion des utilisateurs
