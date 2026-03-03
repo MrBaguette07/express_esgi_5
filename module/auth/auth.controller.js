@@ -55,7 +55,9 @@ exports.signin = async (req, res) => {
     let user = await User.create({
         email: req.body.email,
         username: req.body.username,
-        password: hash
+        password: hash,
+        role: req.body.role || 'collaborateur',
+        team_id: req.body.team_id || null
     });
     res.status(201).json(user);
 }
